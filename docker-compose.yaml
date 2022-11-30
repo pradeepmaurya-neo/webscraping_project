@@ -17,7 +17,7 @@ services:
       depends_on:
         - scrapper
       ports:
-        - "6126:6126"
+        - "6127:6127"
 
   hub:
     image: selenium/hub:4.1.3
