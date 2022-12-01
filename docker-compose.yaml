@@ -10,6 +10,7 @@ services:
     ports:
       - "5000:5000"
 
+
   nginx:
       image: nginx:latest
       volumes:
@@ -35,3 +36,15 @@ services:
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
     shm_size: '1gb'
+
+  redis:
+    image: redis:5.0.5
+    ports:
+      - "6378:6378"
+
+  worker:
+    build:
+      context: .
+    command: celery -A tasks.celery worker --loglevel=info
+
+    
