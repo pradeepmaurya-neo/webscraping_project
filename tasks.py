@@ -10,7 +10,7 @@ from lxml.html import fromstring
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-celery = Celery('tasks', broker='redis://localhost:6378', backend='redis://localhost:6378')
+celery = Celery('tasks', broker='redis://redis:6379/0', backend='redis://redis:6379/0')
 
 def get_proxies():
     url = 'https://free-proxy-list.net/'

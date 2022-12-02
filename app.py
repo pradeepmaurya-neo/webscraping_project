@@ -13,10 +13,11 @@ from login_required_decorator import login_required
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-celery = Celery(app.name, broker='redis://localhost:6378', backend='redis://localhost:6378')
+celery = Celery(app.name, broker='redis://redis:6379/0', backend='redis://redis:6379/0')
 sess = Session()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scrapper.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = "e-T1h5is987ois876se2cre-tk9e258y"
 db = SQLAlchemy(app)
 
 
@@ -74,8 +75,7 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 print("User Logged In")
-                session['user'] = User
-                print(session.get('user'))
+                session['user'] = user
                 return redirect('/')
             else:
                 error = "Wrong password"
@@ -125,6 +125,7 @@ def search():
 @app.route("/result/<task_id>", endpoint="4")
 @login_required
 def show_result(task_id):
+
     web = session.get("web")
     status = AsyncResult(task_id, app=celery)
     df = None
