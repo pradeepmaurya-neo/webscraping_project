@@ -10,7 +10,7 @@ from lxml.html import fromstring
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-celery = Celery('tasks', broker='redis://localhost:6378/0', backend='redis://localhost:6378/0')
+celery = Celery('tasks', broker='redis://localhost:6378', backend='redis://localhost:6378')
 
 def get_proxies():
     url = 'https://free-proxy-list.net/'
@@ -49,7 +49,7 @@ def extract_dice_jobs(tech="python", page=1):
     options.add_argument('--no-sandbox')
     options.add_argument("--proxy-server=%s" % proxy)
     # driver = webdriver.Chrome(executable_path="/home/neosoft/.config/google-chrome/default", options=options)
-    driver=webdriver.Remote(command_executor='http://hub:4444/wd/hub',desired_capabilities=DesiredCapabilities.CHROME)
+    driver=webdriver.Remote(command_executor='http://chrome:4444/wd/hub',desired_capabilities=DesiredCapabilities.CHROME)
     time.sleep(3)
 
     job_titles_list, company_name_list, location_list, job_types_list = [], [], [], []
@@ -59,8 +59,6 @@ def extract_dice_jobs(tech="python", page=1):
         URL = f"https://www.dice.com/jobs?q={tech}&countryCode=US&radius=30&radiusUnit=mi&page={k}&pageSize=20&language=en&eid=S2Q_,bw_1"
 
         driver.get(URL)
-
-        driver.maximize_window()
         try:
 
             input = driver.find_element(By.ID, "typeaheadInput")
@@ -133,7 +131,7 @@ options.add_argument('--no-sandbox')
 options.add_argument("--proxy-server=%s" % proxy)
 description_list, company_name_list, designation_list, salary_list, company_url = [], [], [], [], []
 location_list, qualification_list = [], []
-driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',desired_capabilities=DesiredCapabilities.CHROME)
+driver = webdriver.Remote(command_executor='http://chrome:4444/wd/hub',desired_capabilities=DesiredCapabilities.CHROME)
 language = "python"
 query_param = f'{language}-jobs'
 job_detail_links = []

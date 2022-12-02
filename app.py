@@ -13,7 +13,7 @@ from login_required_decorator import login_required
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-celery = Celery(app.name, broker='redis://localhost:6378/0', backend='redis://localhost:6378/0')
+celery = Celery(app.name, broker='redis://localhost:6378', backend='redis://localhost:6378')
 sess = Session()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scrapper.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
