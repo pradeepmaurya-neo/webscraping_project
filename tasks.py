@@ -11,6 +11,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 celery = Celery('tasks', broker='redis://redis:6379/0', backend='redis://redis:6379/0')
+# celery = Celery('tasks', broker='redis://localhost:6379/0', backend='redis://localhost:6379/0')
 
 def get_proxies():
     url = 'https://free-proxy-list.net/'
@@ -50,6 +51,7 @@ def extract_dice_jobs(tech="python", page=1):
     options.add_argument("--proxy-server=%s" % proxy)
     # driver = webdriver.Chrome(executable_path="/home/neosoft/.config/google-chrome/default", options=options)
     driver=webdriver.Remote(command_executor='http://chrome:4444/wd/hub',desired_capabilities=DesiredCapabilities.CHROME)
+    # driver = webdriver.Chrome(executable_path=ChromeDriverManager().install())
     time.sleep(3)
 
     job_titles_list, company_name_list, location_list, job_types_list = [], [], [], []
@@ -132,6 +134,7 @@ options.add_argument("--proxy-server=%s" % proxy)
 description_list, company_name_list, designation_list, salary_list, company_url = [], [], [], [], []
 location_list, qualification_list = [], []
 driver = webdriver.Remote(command_executor='http://chrome:4444/wd/hub',desired_capabilities=DesiredCapabilities.CHROME)
+# driver = webdriver.Chrome(executable_path=ChromeDriverManager().install())
 language = "python"
 query_param = f'{language}-jobs'
 job_detail_links = []

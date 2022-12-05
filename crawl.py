@@ -1,7 +1,7 @@
 from flask import Flask, send_file
 from flask import redirect, request, session, render_template
 import os
-from celery import Celery
+# from celery import Celery
 from celery.states import state, PENDING, SUCCESS
 from flask_session import Session
 import pandas as pd
@@ -9,11 +9,13 @@ from celery.result import AsyncResult
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash,check_password_hash
 from login_required_decorator import login_required
+from tasks import celery
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-celery = Celery(app.name, broker='redis://redis:6379/0', backend='redis://redis:6379/0')
+# celery = Celery(app.name, broker='redis://localhost:6379/0', backend='redis://localhost:6379/0')
+# celery = Celery(app.name, broker='redis://redis:6379/0', backend='redis://redis:6379/0')
 sess = Session()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scrapper.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -75,7 +77,7 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 print("User Logged In")
-                session['user'] = user
+                session['user'] = user.id
                 return redirect('/')
             else:
                 error = "Wrong password"
