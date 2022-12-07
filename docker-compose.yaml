@@ -8,17 +8,17 @@ services:
       - "4442:4442"
       - "4444:4444"
     shm_size: '1gb'
+    depends_on:
+      - scrapper
 
   scrapper:
     build:
       context: .
-    depends_on:
-      - chrome
-      - worker
     volumes:
       - /api
     ports:
       - "5000:5000"
+
 
   nginx:
       image: nginx:latest
@@ -37,11 +37,11 @@ services:
   worker:
     build:
       context: .
-    command: celery -A tasks.celery worker --loglevel=info
+      dockerfile: Dockerfile
+    command: celery -A crawl.celery worker -l info
+    # command:  ['celery', '-A', 'app.tasks', 'worker']
+    links:
+      - redis
     depends_on:
       - redis
-
-
-     
-
-    
+      - scrapper   
